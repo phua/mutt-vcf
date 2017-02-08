@@ -13,20 +13,24 @@ func scan(filename string, bufferSize int) {
 	if err != nil { log.Fatal(err) }
 	defer file.Close()
 	buffer := make([]byte, bufferSize)
+	var (
+		offset    int
+		key       string
+		vCard     map[string]string
+	)
 	for {
-		var (
-			offset int
-			key    string
-			vCard  map[string]string
-		)
 		n, err := file.Read(buffer)
-		if err != nil { log.Fatal(err) }
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			log.Fatal(err)
+		}
 		for i, j := 0, 0; j < n; j++ {
 			if buffer[j] == 0x3A {
 				key = string(buffer[i:j])
 				if key == "BEGIN" {
 					vCard = make(map[string]string)
-					offset = i
 				}
 				i = j + 1
 			} else if buffer[j] == 0x0A {
@@ -37,9 +41,9 @@ func scan(filename string, bufferSize int) {
 					alias(vCard["FN"], vCard["EMAIL;TYPE=INTERNET;TYPE=WORK"])
 				}
 				i = j + 1
+				offset = i
 			}
 		}
-		if n < bufferSize { return }
 		_, err = file.Seek(int64(offset - n), io.SeekCurrent)
 		if err != nil { log.Fatal(err) }
 	}
