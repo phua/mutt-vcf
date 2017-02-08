@@ -10,7 +10,9 @@ import (
 
 func scan(filename string, bufferSize int) {
 	file, err := os.Open(filename)
-	if err != nil { log.Fatal(err) }
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer file.Close()
 	var (
 		buffer []byte = make([]byte, bufferSize)
@@ -34,8 +36,8 @@ func scan(filename string, bufferSize int) {
 				}
 				i = j + 1
 			} else if buffer[j] == 0x0A {
-				vCard[key] = string(buffer[i:j-1])
-				if (key == "END") {
+				vCard[key] = string(buffer[i : j-1])
+				if key == "END" {
 					alias(vCard["FN"], vCard["EMAIL;TYPE=INTERNET"])
 					alias(vCard["FN"], vCard["EMAIL;TYPE=INTERNET;TYPE=HOME"])
 					alias(vCard["FN"], vCard["EMAIL;TYPE=INTERNET;TYPE=WORK"])
@@ -44,12 +46,14 @@ func scan(filename string, bufferSize int) {
 				offset = i
 			}
 		}
-		_, err = file.Seek(int64(offset - n), io.SeekCurrent)
-		if err != nil { log.Fatal(err) }
+		_, err = file.Seek(int64(offset-n), io.SeekCurrent)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
-func alias(nickname, /* longname, */address string) {
+func alias(nickname /* longname, */, address string) {
 	if address != "" {
 		if nickname == "" {
 			nickname = address
