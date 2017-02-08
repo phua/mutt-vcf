@@ -40,7 +40,7 @@ func scan(filename string, bufferSize int) {
 			}
 		}
 		if n < bufferSize { return }
-		_, err = file.Seek(-int64(n - offset), io.SeekCurrent)
+		_, err = file.Seek(int64(offset - n), io.SeekCurrent)
 		if err != nil { log.Fatal(err) }
 	}
 }
