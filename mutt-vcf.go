@@ -12,11 +12,11 @@ func scan(filename string, bufferSize int) {
 	file, err := os.Open(filename)
 	if err != nil { log.Fatal(err) }
 	defer file.Close()
-	buffer := make([]byte, bufferSize)
 	var (
-		offset    int
-		key       string
-		vCard     map[string]string
+		buffer []byte = make([]byte, bufferSize)
+		offset int
+		key    string
+		vCard  map[string]string
 	)
 	for {
 		n, err := file.Read(buffer)
