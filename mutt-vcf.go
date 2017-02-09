@@ -1,3 +1,7 @@
+/*
+ * https://tools.ietf.org/html/rfc6350
+ */
+
 package main
 
 import (
@@ -52,7 +56,7 @@ func scan(filename string, bufferSize int) {
 	}
 }
 
-func alias(nickname /* longname, */, address string) {
+func alias(nickname, /* longname, */ address string) {
 	if address != "" {
 		if nickname == "" {
 			nickname = address
@@ -65,7 +69,7 @@ func main() {
 	bufferSize := flag.Int("bytes", 1024, "The buffer size in bytes.")
 	flag.Parse()
 	if flag.NArg() < 1 {
-		fmt.Println("Usage:\n\t$", os.Args[0], "[-bytes 1024] /path/to/file.vcf [<< /path/to/mutt/aliases]")
+		fmt.Println("Usage:\n\t$", os.Args[0], "[-bytes 1024] /path/to/file.vcf [>> /path/to/mutt/aliases]")
 		return
 	}
 	scan(flag.Arg(0), *bufferSize)
